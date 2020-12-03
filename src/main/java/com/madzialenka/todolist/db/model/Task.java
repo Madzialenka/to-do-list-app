@@ -1,4 +1,4 @@
-package com.madzialenka.todolist.model;
+package com.madzialenka.todolist.db.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,13 +8,14 @@ import java.time.LocalDateTime;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "TASK_STATUS")
     private TaskStatus taskStatus;
 

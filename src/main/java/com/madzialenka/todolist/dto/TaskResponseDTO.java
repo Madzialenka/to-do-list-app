@@ -1,6 +1,6 @@
 package com.madzialenka.todolist.dto;
 
-import com.madzialenka.todolist.model.TaskStatus;
+import com.madzialenka.todolist.db.model.TaskStatus;
 
 import java.time.LocalDateTime;
 

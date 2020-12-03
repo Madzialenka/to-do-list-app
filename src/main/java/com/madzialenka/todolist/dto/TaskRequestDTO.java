@@ -1,13 +1,10 @@
 package com.madzialenka.todolist.dto;
 
-import com.madzialenka.todolist.model.TaskStatus;
-
-import java.time.LocalDateTime;
+import com.madzialenka.todolist.db.model.TaskStatus;
 
 public class TaskRequestDTO {
     private String description;
     private TaskStatus taskStatus;
-    private LocalDateTime modificationTime;
 
     public TaskRequestDTO() {
     }
@@ -26,13 +23,5 @@ public class TaskRequestDTO {
 
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
-    }
-
-    public LocalDateTime getModificationTime() {
-        return modificationTime;
-    }
-
-    public void setModificationTime(LocalDateTime modificationTime) {
-        this.modificationTime = modificationTime;
     }
 }
