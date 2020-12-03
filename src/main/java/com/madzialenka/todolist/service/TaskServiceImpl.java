@@ -20,7 +20,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskResponseDTO> getTasks() {
-        return taskRepository.findAll().stream()
+        return taskRepository.findAllByOrderByIdAsc().stream()
                 .map(this::mapToTaskResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -28,11 +28,29 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDTO createTask(TaskRequestDTO taskRequestDTO) {
         Task task = new Task();
+        setTaskFields(taskRequestDTO, task);
+        Task savedTask = taskRepository.save(task);
+        return mapToTaskResponseDTO(savedTask);
+    }
+
+    @Override
+    public TaskResponseDTO updateTask(Long id, TaskRequestDTO taskRequestDTO) {
+        Task foundTask = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
+        setTaskFields(taskRequestDTO, foundTask);
+        Task savedTask = taskRepository.save(foundTask);
+        return mapToTaskResponseDTO(savedTask);
+    }
+
+    @Override
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
+
+    private void setTaskFields(TaskRequestDTO taskRequestDTO, Task task) {
         task.setDescription(taskRequestDTO.getDescription());
         task.setTaskStatus(taskRequestDTO.getTaskStatus());
         task.setModificationTime(LocalDateTime.now());
-        Task savedTask = taskRepository.save(task);
-        return mapToTaskResponseDTO(savedTask);
     }
 
     private TaskResponseDTO mapToTaskResponseDTO(Task task) {
