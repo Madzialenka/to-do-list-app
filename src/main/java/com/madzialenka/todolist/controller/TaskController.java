@@ -3,6 +3,7 @@ package com.madzialenka.todolist.controller;
 import com.madzialenka.todolist.dto.TaskRequestDTO;
 import com.madzialenka.todolist.dto.TaskResponseDTO;
 import com.madzialenka.todolist.service.TaskService;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +19,9 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskResponseDTO> getTasks() {
-        return taskService.getTasks();
+    public List<TaskResponseDTO> getTasks(@RequestParam("sortBy") String sortBy,
+                                          @RequestParam("sortDirection") Sort.Direction direction) {
+        return taskService.getTasks(sortBy, direction);
     }
 
     @PostMapping

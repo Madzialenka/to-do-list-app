@@ -4,6 +4,7 @@ import com.madzialenka.todolist.db.model.Task;
 import com.madzialenka.todolist.db.repository.TaskRepository;
 import com.madzialenka.todolist.dto.TaskRequestDTO;
 import com.madzialenka.todolist.dto.TaskResponseDTO;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskResponseDTO> getTasks() {
-        return taskRepository.findAllByOrderByIdAsc().stream()
+    public List<TaskResponseDTO> getTasks(String sortBy, Sort.Direction direction) {
+        return taskRepository.findAll(Sort.by(direction, sortBy)).stream()
                 .map(this::mapToTaskResponseDTO)
                 .collect(Collectors.toList());
     }

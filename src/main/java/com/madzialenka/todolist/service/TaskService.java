@@ -2,12 +2,13 @@ package com.madzialenka.todolist.service;
 
 import com.madzialenka.todolist.dto.TaskRequestDTO;
 import com.madzialenka.todolist.dto.TaskResponseDTO;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 public interface TaskService {
 
-    List<TaskResponseDTO> getTasks();
+    List<TaskResponseDTO> getTasks(String sortBy, Sort.Direction direction);
 
     TaskResponseDTO createTask(TaskRequestDTO taskRequestDTO);
 
