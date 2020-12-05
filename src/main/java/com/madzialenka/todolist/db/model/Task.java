@@ -12,14 +12,14 @@ public class Task {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "TASK_STATUS")
+    @Column(name = "TASK_STATUS", nullable = false)
     private TaskStatus taskStatus;
 
-    @Column(name = "MODIFICATION_TIME")
+    @Column(name = "MODIFICATION_TIME", nullable = false)
     private LocalDateTime modificationTime;
 
     public Task() {

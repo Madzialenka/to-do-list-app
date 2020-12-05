@@ -5,6 +5,7 @@ import com.madzialenka.todolist.db.repository.TaskRepository;
 import com.madzialenka.todolist.dto.TaskRequestDTO;
 import com.madzialenka.todolist.dto.TaskResponseDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,6 +46,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteTasks(List<Long> ids) {
+        taskRepository.deleteByIdIn(ids);
     }
 
     private void setTaskFields(TaskRequestDTO taskRequestDTO, Task task) {
