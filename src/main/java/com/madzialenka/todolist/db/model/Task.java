@@ -2,6 +2,7 @@ package com.madzialenka.todolist.db.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "TASKS")
@@ -23,6 +24,13 @@ public class Task {
     private LocalDateTime modificationTime;
 
     public Task() {
+    }
+
+    public Task(Long id, String description, TaskStatus taskStatus, LocalDateTime modificationTime) {
+        this.id = id;
+        this.description = description;
+        this.taskStatus = taskStatus;
+        this.modificationTime = modificationTime;
     }
 
     public Long getId() {
@@ -55,5 +63,21 @@ public class Task {
 
     public void setModificationTime(LocalDateTime modificationTime) {
         this.modificationTime = modificationTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+                Objects.equals(description, task.description) &&
+                taskStatus == task.taskStatus &&
+                Objects.equals(modificationTime, task.modificationTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, taskStatus, modificationTime);
     }
 }
