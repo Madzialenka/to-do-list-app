@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 class TaskServiceImplTest {
@@ -37,8 +38,8 @@ class TaskServiceImplTest {
         LocalDateTime time = LocalDateTime.now();
 
         List<Task> tasks = Arrays.asList(
-            new Task(1L, "abc", TaskStatus.DONE, time),
-            new Task(2L, "def", TaskStatus.IN_PROGRESS, time)
+                new Task(1L, "abc", TaskStatus.DONE, time),
+                new Task(2L, "def", TaskStatus.IN_PROGRESS, time)
         );
         Mockito.when(taskRepository.findAll(Sort.by(direction, sortBy))).thenReturn(tasks);
 
@@ -71,13 +72,48 @@ class TaskServiceImplTest {
 
     @Test
     void updateTask() {
+        Long id = 1L;
+        String description = "field";
+        TaskStatus taskStatus = TaskStatus.DONE;
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO(description, taskStatus);
+        LocalDateTime time = LocalDateTime.now();
+
+        Task task = new Task(1L, "abc", TaskStatus.TODO, LocalDateTime.now());
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
+        Task savedTask = new Task(1L, description, taskStatus, time);
+        Mockito.when(taskRepository.save(task)).thenReturn(savedTask);
+
+        TaskResponseDTO expected = new TaskResponseDTO(1L, description, taskStatus, time);
+
+        TaskResponseDTO actual = underTest.updateTask(id, taskRequestDTO);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateTask_withTaskNotFound() {
+        Long id = 1L;
+        String description = "field";
+        TaskStatus taskStatus = TaskStatus.DONE;
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO(description, taskStatus);
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.empty());
+
+        RuntimeException runtimeException =
+                Assertions.assertThrows(RuntimeException.class, () -> underTest.updateTask(id, taskRequestDTO));
+        Assertions.assertEquals("Task not found with ID: " + id, runtimeException.getMessage());
     }
 
     @Test
     void deleteTask() {
+        Long id = 1L;
+        underTest.deleteTask(id);
+        Mockito.verify(taskRepository).deleteById(id);
     }
 
     @Test
     void deleteTasks() {
+        List<Long> ids = Arrays.asList(1L, 2L);
+        underTest.deleteTasks(ids);
+        Mockito.verify(taskRepository).deleteByIdIn(ids);
     }
 }
